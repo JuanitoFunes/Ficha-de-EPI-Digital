@@ -207,9 +207,9 @@ button {
 
 .signature-box {
   border: 2px dashed #3b82f6;
-  height: 100px;
+  height: 80px;
   margin: 15px 0;
-  border-radius: 12px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -218,17 +218,54 @@ button {
   cursor: pointer;
   transition: all 0.3s ease;
   background: #f8fafc;
+  padding: 10px;
+  text-align: center;
+  font-size: 14px;
+  position: relative;
+  overflow: hidden;
 }
 
 .signature-box:hover {
   background: #f0f7ff;
   border-color: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
 }
 
-.signed {
+.signature-box:active {
+  transform: translateY(0);
+}
+
+.signature-box::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, transparent, rgba(59, 130, 246, 0.05), transparent);
+  top: 0;
+  left: -100%;
+  transition: 0.5s;
+}
+
+.signature-box:hover::before {
+  left: 100%;
+}
+
+.signature-box.signed {
   background: #f0f7ff;
   border: 2px solid #3b82f6;
   color: #1e40af;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
+  padding: 12px;
+}
+
+.signature-box.signed::after {
+  content: '✓';
+  position: absolute;
+  right: 10px;
+  color: #22c55e;
+  font-weight: bold;
 }
 
 .modal-overlay {
@@ -261,6 +298,24 @@ button {
   gap: 8px;
 }
 
+.modal-buttons button {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  min-width: 120px;
+  text-align: center;
+}
+
+.modal-buttons button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-buttons button:active {
+  transform: translateY(0);
+}
+
 #signatureCanvas {
   display: none;
   position: fixed;
@@ -289,7 +344,6 @@ button {
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  min-height: 400px;
 }
 
 .epi-history-section {
@@ -461,8 +515,9 @@ button {
   }
   
   .signature-box {
-    height: 80px;
-    font-size: 14px;
+    height: 60px;
+    font-size: 13px;
+    margin: 10px 0;
   }
   
   #signatureCanvas {
@@ -479,8 +534,8 @@ button {
   }
   
   .modal-buttons button {
-    padding: 8px 16px;
-    font-size: 14px;
+    padding: 10px 20px;
+    min-width: 100px;
   }
 }
 
@@ -970,6 +1025,32 @@ function novaFicha() {
       </div>
       <div class="epi-item">
         <label>
+          <input type="checkbox" name="epi" value="botina-composite">
+          Botina de Segurança com Composite
+        </label>
+        <div class="epi-details">
+          <div class="epi-ca">
+            <input type="text" placeholder="C.A. Nº" name="ca-botina-composite">
+          </div>
+          <div class="epi-quantidade">
+            <input type="number" placeholder="Quantidade" name="quantidade-botina-composite" min="1">
+          </div>
+          <div class="epi-tamanho">
+            <input type="text" placeholder="Tamanho" name="tamanho-botina-composite">
+          </div>
+          <div class="epi-numero">
+            <input type="text" placeholder="Número" name="numero-botina-composite">
+          </div>
+        </div>
+        <div class="epi-troca">
+          <input type="date" placeholder="Data da Troca" name="troca-botina-composite">
+        </div>
+        <div class="signature-box epi-signature" onclick="openSignature('epi-botina-composite')" id="epi-botina-compositeSignature">
+          Clique para assinar
+        </div>
+      </div>
+      <div class="epi-item">
+        <label>
           <input type="checkbox" name="epi" value="calca-administrativa">
           Calça Administrativa
         </label>
@@ -1173,6 +1254,32 @@ function novaFicha() {
           <input type="date" placeholder="Data da Troca" name="troca-carneira">
         </div>
         <div class="signature-box epi-signature" onclick="openSignature('epi-carneira')" id="epi-carneiraSignature">
+          Clique para assinar
+        </div>
+      </div>
+      <div class="epi-item">
+        <label>
+          <input type="checkbox" name="epi" value="colete-refletivo">
+          Colete Refletivo
+        </label>
+        <div class="epi-details">
+          <div class="epi-ca">
+            <input type="text" placeholder="C.A. Nº" name="ca-colete-refletivo">
+          </div>
+          <div class="epi-quantidade">
+            <input type="number" placeholder="Quantidade" name="quantidade-colete-refletivo" min="1">
+          </div>
+          <div class="epi-tamanho">
+            <input type="text" placeholder="Tamanho" name="tamanho-colete-refletivo">
+          </div>
+          <div class="epi-numero">
+            <input type="text" placeholder="Número" name="numero-colete-refletivo">
+          </div>
+        </div>
+        <div class="epi-troca">
+          <input type="date" placeholder="Data da Troca" name="troca-colete-refletivo">
+        </div>
+        <div class="signature-box epi-signature" onclick="openSignature('epi-colete-refletivo')" id="epi-colete-refletivoSignature">
           Clique para assinar
         </div>
       </div>
@@ -1490,131 +1597,79 @@ function novaFicha() {
       </div>
       <div class="epi-item">
         <label>
-          <input type="checkbox" name="epi" value="oculos-escuro">
-          Óculos de Segurança Escuro
+          <input type="checkbox" name="epi" value="oculos-graduado">
+          Óculos de Segurança Graduado
         </label>
         <div class="epi-details">
           <div class="epi-ca">
-            <input type="text" placeholder="C.A. Nº" name="ca-oculos-escuro">
+            <input type="text" placeholder="C.A. Nº" name="ca-oculos-graduado">
           </div>
           <div class="epi-quantidade">
-            <input type="number" placeholder="Quantidade" name="quantidade-oculos-escuro" min="1">
+            <input type="number" placeholder="Quantidade" name="quantidade-oculos-graduado" min="1">
           </div>
           <div class="epi-tamanho">
-            <input type="text" placeholder="Tamanho" name="tamanho-oculos-escuro">
+            <input type="text" placeholder="Tamanho" name="tamanho-oculos-graduado">
           </div>
           <div class="epi-numero">
-            <input type="text" placeholder="Número" name="numero-oculos-escuro">
+            <input type="text" placeholder="Número" name="numero-oculos-graduado">
           </div>
         </div>
         <div class="epi-troca">
-          <input type="date" placeholder="Data da Troca" name="troca-oculos-escuro">
+          <input type="date" placeholder="Data da Troca" name="troca-oculos-graduado">
         </div>
-        <div class="signature-box epi-signature" onclick="openSignature('epi-oculos-escuro')" id="epi-oculos-escuroSignature">
+        <div class="signature-box epi-signature" onclick="openSignature('epi-oculos-graduado')" id="epi-oculos-graduadoSignature">
           Clique para assinar
         </div>
       </div>
       <div class="epi-item">
         <label>
-          <input type="checkbox" name="epi" value="oculos-incolor">
-          Óculos de Segurança Incolor
+          <input type="checkbox" name="epi" value="protetor-solar">
+          Protetor Solar
         </label>
         <div class="epi-details">
           <div class="epi-ca">
-            <input type="text" placeholder="C.A. Nº" name="ca-oculos-incolor">
+            <input type="text" placeholder="C.A. Nº" name="ca-protetor-solar">
           </div>
           <div class="epi-quantidade">
-            <input type="number" placeholder="Quantidade" name="quantidade-oculos-incolor" min="1">
+            <input type="number" placeholder="Quantidade" name="quantidade-protetor-solar" min="1">
           </div>
           <div class="epi-tamanho">
-            <input type="text" placeholder="Tamanho" name="tamanho-oculos-incolor">
+            <input type="text" placeholder="Tamanho" name="tamanho-protetor-solar">
           </div>
           <div class="epi-numero">
-            <input type="text" placeholder="Número" name="numero-oculos-incolor">
+            <input type="text" placeholder="Número" name="numero-protetor-solar">
           </div>
         </div>
         <div class="epi-troca">
-          <input type="date" placeholder="Data da Troca" name="troca-oculos-incolor">
+          <input type="date" placeholder="Data da Troca" name="troca-protetor-solar">
         </div>
-        <div class="signature-box epi-signature" onclick="openSignature('epi-oculos-incolor')" id="epi-oculos-incolorSignature">
+        <div class="signature-box epi-signature" onclick="openSignature('epi-protetor-solar')" id="epi-protetor-solarSignature">
           Clique para assinar
         </div>
       </div>
       <div class="epi-item">
         <label>
-          <input type="checkbox" name="epi" value="oculos-macariqueiro">
-          Óculos de Maçariqueiro
+          <input type="checkbox" name="epi" value="repelente">
+          Repelente
         </label>
         <div class="epi-details">
           <div class="epi-ca">
-            <input type="text" placeholder="C.A. Nº" name="ca-oculos-macariqueiro">
+            <input type="text" placeholder="C.A. Nº" name="ca-repelente">
           </div>
           <div class="epi-quantidade">
-            <input type="number" placeholder="Quantidade" name="quantidade-oculos-macariqueiro" min="1">
+            <input type="number" placeholder="Quantidade" name="quantidade-repelente" min="1">
           </div>
           <div class="epi-tamanho">
-            <input type="text" placeholder="Tamanho" name="tamanho-oculos-macariqueiro">
+            <input type="text" placeholder="Tamanho" name="tamanho-repelente">
           </div>
           <div class="epi-numero">
-            <input type="text" placeholder="Número" name="numero-oculos-macariqueiro">
+            <input type="text" placeholder="Número" name="numero-repelente">
           </div>
         </div>
         <div class="epi-troca">
-          <input type="date" placeholder="Data da Troca" name="troca-oculos-macariqueiro">
+          <input type="date" placeholder="Data da Troca" name="troca-repelente">
         </div>
-        <div class="signature-box epi-signature" onclick="openSignature('epi-oculos-macariqueiro')" id="epi-oculos-macariqueiroSignature">
-          Clique para assinar
-        </div>
-      </div>
-      <div class="epi-item">
-        <label>
-          <input type="checkbox" name="epi" value="perneira">
-          Perneira
-        </label>
-        <div class="epi-details">
-          <div class="epi-ca">
-            <input type="text" placeholder="C.A. Nº" name="ca-perneira">
-          </div>
-          <div class="epi-quantidade">
-            <input type="number" placeholder="Quantidade" name="quantidade-perneira" min="1">
-          </div>
-          <div class="epi-tamanho">
-            <input type="text" placeholder="Tamanho" name="tamanho-perneira">
-          </div>
-          <div class="epi-numero">
-            <input type="text" placeholder="Número" name="numero-perneira">
-          </div>
-        </div>
-        <div class="epi-troca">
-          <input type="date" placeholder="Data da Troca" name="troca-perneira">
-        </div>
-        <div class="signature-box epi-signature" onclick="openSignature('epi-perneira')" id="epi-perneiraSignature">
-          Clique para assinar
-        </div>
-      </div>
-      <div class="epi-item">
-        <label>
-          <input type="checkbox" name="epi" value="perneira-raspa">
-          Perneira de Raspa
-        </label>
-        <div class="epi-details">
-          <div class="epi-ca">
-            <input type="text" placeholder="C.A. Nº" name="ca-perneira-raspa">
-          </div>
-          <div class="epi-quantidade">
-            <input type="number" placeholder="Quantidade" name="quantidade-perneira-raspa" min="1">
-          </div>
-          <div class="epi-tamanho">
-            <input type="text" placeholder="Tamanho" name="tamanho-perneira-raspa">
-          </div>
-          <div class="epi-numero">
-            <input type="text" placeholder="Número" name="numero-perneira-raspa">
-          </div>
-        </div>
-        <div class="epi-troca">
-          <input type="date" placeholder="Data da Troca" name="troca-perneira-raspa">
-        </div>
-        <div class="signature-box epi-signature" onclick="openSignature('epi-perneira-raspa')" id="epi-perneira-raspaSignature">
+        <div class="signature-box epi-signature" onclick="openSignature('epi-repelente')" id="epi-repelenteSignature">
           Clique para assinar
         </div>
       </div>
